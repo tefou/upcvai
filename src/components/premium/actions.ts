@@ -25,7 +25,7 @@ export async function createCheckoutSession() {
     if (!paymentLink.checkoutUrl) {
         throw new Error("Failed to create payment link");
     }
-
+    //dmm vercel
     // Update the UserSubscription in Prisma upon successful payment
     await prisma.userSubscription.upsert({
         where: { userId: user.id },
@@ -45,4 +45,4 @@ export async function createCheckoutSession() {
     });
 
     return paymentLink.checkoutUrl;
-}
+} 
