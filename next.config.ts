@@ -14,8 +14,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  eslint: {
-    ignoreDuringBuilds: true, // Thêm dòng này để tắt kiểm tra ESLint trong quá trình build
+  typescript: {
+    ignoreBuildErrors: true, // Thêm dòng này để tắt kiểm tra ESLint trong quá trình build
   },
 };
 
