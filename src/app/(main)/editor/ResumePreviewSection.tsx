@@ -8,6 +8,7 @@ interface ResumePreviewSectionProps {
   resumeData: ResumeValues;
   setResumeData: (data: ResumeValues) => void;
   className?: string;
+  colorHex: string;
 }
 
 export default function ResumePreviewSection({
