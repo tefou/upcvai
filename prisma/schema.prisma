@@ -92,3 +92,4 @@ model UserSubscription {
 
   @@map("user_subscriptions")
 }
+
