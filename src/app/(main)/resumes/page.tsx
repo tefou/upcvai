@@ -102,6 +102,7 @@ const formatDate = () => {
     day: 'numeric'
   };
   const rawDate = date.toLocaleDateString('vi-VN', options);
+  console.log(rawDate)
   
   // Transform from "Thứ Năm, 20 tháng 2, 2025" to "Thứ Năm, ngày 20 tháng 2 năm 2025"
   const parts = rawDate.split(',');
@@ -146,7 +147,7 @@ export default async function Page() {
   ]);
 
   const { greeting, wish, background } = getTimeBasedContent();
-
+  // console.log(formatDate);
   return (
     <main className="mx-auto w-full max-w-7xl space-y-6 px-3 py-6">
       {/* Greeting Section with Dynamic Background */}
