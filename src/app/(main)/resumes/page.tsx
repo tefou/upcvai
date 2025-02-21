@@ -14,8 +14,11 @@ export const metadata: Metadata = {
 };
 
 const getTimeBasedContent = () => {
-  const hour = new Date().getHours();
-  console.log(hour);
+  const vietnamTime = new Date().toLocaleString("en-US", {
+    timeZone: "Asia/Ho_Chi_Minh"
+  });
+  const vietnamDate = new Date(vietnamTime);
+  const hour = vietnamDate.getHours();
   
   // Morning (5AM - 9:59AM)
   if (hour >= 5 && hour < 10) {
