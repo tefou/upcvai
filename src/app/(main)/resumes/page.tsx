@@ -149,14 +149,8 @@ export default async function Page() {
 
   const { greeting, wish, background } = getTimeBasedContent();
   // console.log(formatDate);
-
-  const showDate = () => {
-    const hour = new Date().getHours();
-    console.log(hour);
-  }
   return (
     <main className="mx-auto w-full max-w-7xl space-y-6 px-3 py-6">
-      <button onClick={showDate}>Xem gio</button>
       {/* Greeting Section with Dynamic Background */}
       <div className={`relative overflow-hidden rounded-xl bg-gradient-to-r ${background} p-8 shadow-lg`}>
         <div className="relative z-10">
