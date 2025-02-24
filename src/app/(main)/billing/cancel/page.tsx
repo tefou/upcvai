@@ -7,8 +7,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 export default async function Page() {
-    try {
-        const user = await currentUser();
+    const user = await currentUser();
         if (!user) {
             redirect("/sign-in");
         }
@@ -43,8 +42,4 @@ export default async function Page() {
                 </Button>
             </main>
         );
-    } catch (error) {
-        console.error("Lỗi khi cập nhật trạng thái:", error);
-        redirect("/resumes");
-    }
-}
+} 
