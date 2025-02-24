@@ -1,3 +1,4 @@
+//premium/action.ts
 "use server"
 import payos from '../../lib/payos';
 import { currentUser } from "@clerk/nextjs/server"

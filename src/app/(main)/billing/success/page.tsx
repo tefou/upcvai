@@ -1,3 +1,4 @@
+//billing/success/page.tsx
 "use server";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -44,6 +45,6 @@ export default async function Page() {
         );
     } catch (error) {
         console.error("Lỗi khi cập nhật trạng thái:", error);
-        redirect("/billing/reusumes");
+        redirect("/resumes");
     }
 }
