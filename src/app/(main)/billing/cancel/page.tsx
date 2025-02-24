@@ -22,11 +22,11 @@ export default async function Page() {
             throw new Error("Không tìm thấy đơn hàng");
         }
 
-        // Giả định rằng nếu user quay lại /billing/success thì họ đã thanh toán thành công
+        
         await prisma.userSubscription.update({
             where: { userId: user.id },
             data: {
-                status: "CANCEL",
+                status: "cancel",
                 isPremium: false,
                 expiresAt: new Date(new Date().setDate(new Date().getDate() + 30)),
             },
