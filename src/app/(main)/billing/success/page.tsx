@@ -44,6 +44,6 @@ export default async function Page() {
         );
     } catch (error) {
         console.error("Lỗi khi cập nhật trạng thái:", error);
-        redirect("/billing/error");
+        redirect("/billing/reusumes");
     }
 }
