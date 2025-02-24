@@ -25,7 +25,7 @@ export default async function Page() {
         await prisma.userSubscription.update({
             where: { userId: user.id },
             data: {
-                status: "completed",
+                status: "PAID",
                 isPremium: true,
                 expiresAt: new Date(new Date().setDate(new Date().getDate() + 30)),
             },

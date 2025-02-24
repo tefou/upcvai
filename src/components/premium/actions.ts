@@ -16,15 +16,15 @@ export async function createCheckoutSession() {
         where: { userId: user.id },
         update: {
             payosorderCode: orderCode.toString(),
-            status: "pending",
-            isPremium: true,
+            status: "CANCELLED",
+            isPremium: false,
             expiresAt: new Date(new Date().setDate(new Date().getDate() + 30)) // Set to 30 days from now
         },
         create: {
             userId: user.id,
             payosorderCode: orderCode.toString(),
-            status: "pending",
-            isPremium: true,
+            status: "CANCELLED",
+            isPremium: false,
             expiresAt: new Date(new Date().setDate(new Date().getDate() + 30)) // Set to 30 days from now
         }
     });
