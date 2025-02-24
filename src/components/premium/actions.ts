@@ -1,7 +1,7 @@
 "use server"
 import payos from '../../lib/payos';
 import { currentUser } from "@clerk/nextjs/server"
-// import prisma from '@/lib/prisma';
+import prisma from '@/lib/prisma';
 
 export async function createCheckoutSession() {
     const user = await currentUser()
@@ -11,6 +11,23 @@ export async function createCheckoutSession() {
     }
 
     const orderCode = Math.floor(Math.random() * 1000000);
+    // Lưu orderCode vào database trước khi mở trang thanh toán
+    await prisma.userSubscription.upsert({
+        where: { userId: user.id },
+        update: {
+            payosorderCode: orderCode.toString(),
+            status: "pending",
+            isPremium: true,
+            expiresAt: new Date(new Date().setDate(new Date().getDate() + 30)) // Set to 30 days from now
+        },
+        create: {
+            userId: user.id,
+            payosorderCode: orderCode.toString(),
+            status: "pending",
+            isPremium: true,
+            expiresAt: new Date(new Date().setDate(new Date().getDate() + 30)) // Set to 30 days from now
+        }
+    });
 
     const order = {
         amount: 39000,
