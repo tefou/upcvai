@@ -6,61 +6,42 @@ import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 export default async function Page() {
-    const user = await currentUser();
-    if (!user) {
-        return redirect("/sign-in");
-    }
-
     try {
-        // Lấy thông tin đơn hàng
+        const user = await currentUser();
+        if (!user) {
+            redirect("/sign-in");
+        }
+
+        // Lấy orderCode từ database
         const subscription = await prisma.userSubscription.findUnique({
             where: { userId: user.id },
         });
 
-        if (!subscription) {
-            console.error("Không tìm thấy đơn hàng cho user:", user.id);
-            return (
-                <main className="text-center">
-                    <h1 className="text-3xl font-bold text-red-500">Lỗi</h1>
-                    <p>Không tìm thấy đơn hàng của bạn. Vui lòng thử lại.</p>
-                    <Button asChild>
-                        <Link href="/resumes">Quay lại</Link>
-                    </Button>
-                </main>
-            );
+        if (!subscription || !subscription.payosorderCode) {
+            throw new Error("Không tìm thấy đơn hàng");
         }
 
-        // Cập nhật trạng thái đơn hàng
+        
         await prisma.userSubscription.update({
             where: { userId: user.id },
             data: {
-                status: "cancelled", // Kiểm tra xem có đúng giá trị trong DB không
+                status: "cancelled",
                 isPremium: false,
                 expiresAt: new Date(new Date().setDate(new Date().getDate() + 30)),
             },
         });
 
         return (
-            <main className="mx-auto max-w-7x1 space-y-6 px-3 py-6 text-center">
-                <h1 className="text-3xl font-bold text-red-500">Thanh Toán Thất Bại</h1>
-                <p>
-                    Bạn đã đăng ký không thành công gói cước Premium !!!
-                </p>
-                <Button asChild className="text-white">
-                    <Link href="/resumes">Hãy Đăng Ký Lại !!!</Link>
-                </Button>
-            </main>
+            <div className="flex flex-col items-center justify-center min-h-screen text-center">
+                <h1 className="text-2xl font-bold">Thanh Toán Thất Bại</h1>
+                <p className="text-lg mt-2">Bạn chưa đăng kí gói Premium thành công!</p>
+                <Link href="/resumes">
+                    <Button className="mt-4">Hãy Thử Lại Đăng Kí Lại !!!</Button>
+                </Link>
+            </div>
         );
     } catch (error) {
         console.error("Lỗi khi cập nhật trạng thái:", error);
-        return (
-            <main className="text-center">
-                <h1 className="text-3xl font-bold text-red-500">Có lỗi xảy ra</h1>
-                <p>Không thể xử lý đơn hàng của bạn. Vui lòng thử lại.</p>
-                <Button asChild>
-                    <Link href="/resumes">Quay lại</Link>
-                </Button>
-            </main>
-        );
+        redirect("/billing/cancel");
     }
 }
