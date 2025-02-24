@@ -1,7 +1,7 @@
 "use server"
 import payos from '../../lib/payos';
 import { currentUser } from "@clerk/nextjs/server"
-import prisma from '@/lib/prisma';
+// import prisma from '@/lib/prisma';
 
 export async function createCheckoutSession() {
     const user = await currentUser()
@@ -22,38 +22,27 @@ export async function createCheckoutSession() {
 
     const paymentLink = await payos.createPaymentLink(order);
 
-    if (!paymentLink.checkoutUrl) {
-        throw new Error("Failed to create payment link");
-    }
+    // if (!paymentLink.checkoutUrl) {
+    //     throw new Error("Failed to create payment link");
+    // }
+    
+    // // Update the UserSubscription in Prisma upon successful payment
+    // await prisma.userSubscription.upsert({
+    //     where: { userId: user.id },
+    //     update: {
+    //         payosorderCode: orderCode.toString(),
+    //         status: "completed",
+    //         isPremium: true,
+    //         expiresAt: new Date(new Date().setDate(new Date().getDate() + 30)) // Set to 30 days from now
+    //     },
+    //     create: {
+    //         userId: user.id,
+    //         payosorderCode: orderCode.toString(),
+    //         status: "completed",
+    //         isPremium: true,
+    //         expiresAt: new Date(new Date().setDate(new Date().getDate() + 30)) // Set to 30 days from now
+    //     }
+    // });
 
-    // Chỉ trả về URL thanh toán, KHÔNG update database ở đây
     return paymentLink.checkoutUrl;
-}
-
-// Tạo hàm riêng để xử lý khi thanh toán thành công
-export async function processSuccessfulPayment() {
-    const user = await currentUser()
-
-    if (!user) {
-        throw new Error("Not Auth")
-    }
-
-    const orderCode = Math.floor(Math.random() * 1000000);
-
-    await prisma.userSubscription.upsert({
-        where: { userId: user.id },
-        update: {
-            payosorderCode: orderCode.toString(),
-            status: "completed",
-            isPremium: true,
-            expiresAt: new Date(new Date().setDate(new Date().getDate() + 30))
-        },
-        create: {
-            userId: user.id,
-            payosorderCode: orderCode.toString(),
-            status: "completed",
-            isPremium: true,
-            expiresAt: new Date(new Date().setDate(new Date().getDate() + 30))
-        }
-    });
 }
