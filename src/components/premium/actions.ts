@@ -25,24 +25,35 @@ export async function createCheckoutSession() {
     if (!paymentLink.checkoutUrl) {
         throw new Error("Failed to create payment link");
     }
-    //dmm vercel
-    // Update the UserSubscription in Prisma upon successful payment
+
+    // Chỉ trả về URL thanh toán, KHÔNG update database ở đây
+    return paymentLink.checkoutUrl;
+}
+
+// Tạo hàm riêng để xử lý khi thanh toán thành công
+export async function processSuccessfulPayment() {
+    const user = await currentUser()
+
+    if (!user) {
+        throw new Error("Not Auth")
+    }
+
+    const orderCode = Math.floor(Math.random() * 1000000);
+
     await prisma.userSubscription.upsert({
         where: { userId: user.id },
         update: {
             payosorderCode: orderCode.toString(),
             status: "completed",
             isPremium: true,
-            expiresAt: new Date(new Date().setDate(new Date().getDate() + 30)) // Set to 30 days from now
+            expiresAt: new Date(new Date().setDate(new Date().getDate() + 30))
         },
         create: {
             userId: user.id,
             payosorderCode: orderCode.toString(),
             status: "completed",
             isPremium: true,
-            expiresAt: new Date(new Date().setDate(new Date().getDate() + 30)) // Set to 30 days from now
+            expiresAt: new Date(new Date().setDate(new Date().getDate() + 30))
         }
     });
-
-    return paymentLink.checkoutUrl;
-} 
+}
