@@ -1,4 +1,3 @@
-//billing/success/page.tsx
 "use server";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -26,7 +25,7 @@ export default async function Page() {
         await prisma.userSubscription.update({
             where: { userId: user.id },
             data: {
-                status: "complete",
+                status: "completed",
                 isPremium: true,
                 expiresAt: new Date(new Date().setDate(new Date().getDate() + 30)),
             },
