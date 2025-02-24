@@ -39,7 +39,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen text-center">
-            <h1 className="text-2xl font-bold text-red-600">Thanh Toán Thất Bại</h1>
+            <h1 className="text-3xl font-bold text-red-600">Thanh Toán Thất Bại</h1>
             <p className="text-lg mt-2">Bạn đã đăng ký không thành công gói cước Premium!</p>
             <Link href="/resumes">
                 <Button className="mt-4">Hãy Đăng Ký Lại</Button>
