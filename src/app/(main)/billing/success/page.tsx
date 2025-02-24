@@ -4,66 +4,50 @@ import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { notFound } from "next/navigation";
 
-export default async function Page() {
-    try {
-        const user = await currentUser();
-        if (!user) {
-            redirect("/sign-in");
-        }
+export default async function Page({ searchParams }: { searchParams: { [key: string]: string } }) {
+    const user = await currentUser();
+    if (!user) {
+        return redirect("/sign-in");
+    }
 
-        // Validate user.id exists
-        if (!user.id) {
-            throw new Error("User ID not found");
-        }
+    // Lấy các tham số từ URL
+    const { status, orderCode } = searchParams;
+    if (!orderCode) {
+        throw new Error("Thiếu orderCode trong URL");
+    }
 
-        // Fetch subscription with error handling
-        const subscription = await prisma.userSubscription.findUnique({
-            where: { userId: user.id },
-        }).catch(error => {
-            console.error("Database query failed:", error);
-            throw new Error("Failed to fetch subscription");
-        });
+    console.log("Received status:", status, "for orderCode:", orderCode);
 
-        // Use notFound() instead of throwing error for better UX
-        if (!subscription || !subscription.payosorderCode) {
-            notFound();
-        }
+    // Tìm đơn hàng trong database
+    const subscription = await prisma.userSubscription.findUnique({
+        where: { payosorderCode: orderCode },
+    });
 
-        // Update subscription status with error handling
+    if (!subscription) {
+        console.error("Không tìm thấy đơn hàng:", orderCode);
+        return redirect("/resumes");
+    }
+
+    // Kiểm tra nếu status từ URL là "PAID" thì cập nhật database
+    if (status === "PAID") {
         await prisma.userSubscription.update({
-            where: { userId: user.id },
+            where: { payosorderCode: orderCode },
             data: {
-                status: "PAID",
+                status: "completed",
                 isPremium: true,
                 expiresAt: new Date(new Date().setDate(new Date().getDate() + 30)),
             },
-        }).catch(error => {
-            console.error("Failed to update subscription:", error);
-            throw new Error("Failed to update subscription status");
         });
-
-        return (
-            <div className="flex flex-col items-center justify-center min-h-screen text-center">
-                <h1 className="text-2xl font-bold">Thanh Toán Thành Công</h1>
-                <p className="text-lg mt-2">Gói cước Premium đã đăng ký thành công!</p>
-                <Link href="/resumes">
-                    <Button className="mt-4">Bắt Đầu Trải Nghiệm Premium</Button>
-                </Link>
-            </div>
-        );
-    } catch (error) {
-        console.error("Error in billing success page:", error);
-        // Return an error UI instead of throwing
-        return (
-            <div className="flex flex-col items-center justify-center min-h-screen text-center">
-                <h1 className="text-2xl font-bold text-red-600">Đã xảy ra lỗi</h1>
-                <p className="text-lg mt-2">Vui lòng thử lại sau hoặc liên hệ hỗ trợ</p>
-                <Link href="/support">
-                    <Button variant="outline" className="mt-4">Liên Hệ Hỗ Trợ</Button>
-                </Link>
-            </div>
-        );
     }
+
+    return (
+        <div className="flex flex-col items-center justify-center min-h-screen text-center">
+            <h1 className="text-2xl font-bold text-green-600">Thanh Toán Thành Công</h1>
+            <p className="text-lg mt-2">Gói cước Premium đã đăng ký thành công!</p>
+            <Link href="/resumes">
+                <Button className="mt-4">Bắt Đầu Trải Nghiệm Premium</Button>
+            </Link>
+        </div>
+    );
 }
