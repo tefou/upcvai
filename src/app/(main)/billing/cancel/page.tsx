@@ -1,8 +1,10 @@
+//billing/success/page.tsx
 "use server";
-
-import { redirect } from "next/navigation";
-import { currentUser } from "@clerk/nextjs/server";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import prisma from "@/lib/prisma";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 export default async function Page() {
     try {
@@ -16,30 +18,33 @@ export default async function Page() {
             where: { userId: user.id },
         });
 
-        if (!subscription) {
+        if (!subscription || !subscription.payosorderCode) {
             throw new Error("Không tìm thấy đơn hàng");
         }
 
-        // Cập nhật trạng thái đơn hàng thành "CANCELLED"
+        // Giả định rằng nếu user quay lại /billing/success thì họ đã thanh toán thành công
         await prisma.userSubscription.update({
             where: { userId: user.id },
             data: {
-                status: "CANCELLED",
+                status: "CANCEL",
                 isPremium: false,
+                expiresAt: new Date(new Date().setDate(new Date().getDate() + 30)),
             },
         });
 
         return (
-            <main className="mx-auto max-w-7xl space-y-6 px-3 py-6 text-center">
+            <main className="mx-auto max-w-7x1 space-y-6 px-3 py-6 text-center">
                 <h1 className="text-3xl font-bold text-red-500">Thanh Toán Thất Bại</h1>
-                <p>Gói cước Premium chưa được đăng ký thành công.</p>
-                <a href="/resumes">
-                    <button className="px-4 py-2 bg-red-500 text-white rounded-md">Thử Đăng Ký Lại</button>
-                </a>
+                <p>
+                    Bạn đã đăng kí không thành công gói cước Premium !!!
+                </p>
+                <Button asChild className="text-white">
+                    <Link href="/resumes">Hãy Đăng Kí Lại !!!</Link>
+                </Button>
             </main>
         );
     } catch (error) {
-        console.error("Lỗi khi cập nhật trạng thái hủy thanh toán:", error);
+        console.error("Lỗi khi cập nhật trạng thái:", error);
         redirect("/resumes");
     }
 }
