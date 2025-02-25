@@ -21,3 +21,8 @@ export function canUseAITools(subscriptionLevel: SubscriptionLevel) {
 export function canUseCustomizations(subscriptionLevel: SubscriptionLevel) {
   return subscriptionLevel === "pre";
 }
+
+export function LogoPremium(subscriptionLevel: SubscriptionLevel) {
+  return subscriptionLevel === "pre";
+}
+
