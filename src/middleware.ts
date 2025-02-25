@@ -7,6 +7,11 @@ const isPublicRoute = createRouteMatcher([
   "/api/webhooks/clerk",
 ]);
 
+clerkMiddleware({
+  authorizedParties: ['https://www.upteam.icu/'],
+})
+
+
 export default clerkMiddleware(async (auth, request) => {
   if (!isPublicRoute(request)) {
     await auth.protect();
