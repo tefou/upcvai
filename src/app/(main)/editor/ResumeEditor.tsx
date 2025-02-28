@@ -52,8 +52,8 @@ export default function ResumeEditor({resumeToEdit}: ResumeEditorProps){
               Bạn hãy làm theo các bước. CV của bạn được tự động lưu.
             </p>
           </header>
-          <main className="relative grow">
-            <div className="absolute bottom-0 top-0 flex w-full">
+          <main className=" grow">
+            <div className=" bottom-0 top-0 flex w-full">
                 <div className="w-full p-3 md:w-1/2">
                   <Breadcrumbs currentStep={currentStep} setCurrentStep={setStep} />
                   {FormComponent && (
@@ -79,6 +79,7 @@ export default function ResumeEditor({resumeToEdit}: ResumeEditorProps){
             setShowSmResumePreview={setShowSmResumePreview}
             isSaving={isSaving}
           />
+         
         </div>
     );
 }

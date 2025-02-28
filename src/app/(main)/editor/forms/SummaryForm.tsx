@@ -73,13 +73,13 @@ export default function SummaryForm({
           />
         </form>
       </Form>
-      <button
+      {/* <button
         onClick={handlePrint}
         className="fixed bottom-4 right-4 flex items-center px-4 py-2 bg-black text-white rounded shadow hover:bg-slate-800 focus:outline-none"
       >
         <PrinterIcon className="h-5 w-5 mr-2" />
         In
-      </button>
+      </button> */}
     </div>
   );
 }

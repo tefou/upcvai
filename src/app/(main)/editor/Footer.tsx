@@ -32,8 +32,8 @@ export default function Footer({
   )?.key;
 
   return (
-    <footer className="w-full border-t px-3 py-5 items-center justify-between flex bottom-0 left-0 right-0 bg-white shadow-md transition-transform duration-300">
-      <div className="mx-auto flex max-w-7xl flex-wrap justify-between gap-3">
+    <footer className="w-full border-t px-3 py-5 items-center justify-between flex bg-white shadow-md transition-transform duration-300">
+      <div className="mx-auto flex max-w-7xl justify-between gap-3 items-center" >
         <div className="flex items-center gap-3">
           <Button
             variant="secondary"
@@ -62,7 +62,7 @@ export default function Footer({
         >
           {showSmResumePreview ? <PenLineIcon /> : <FileUserIcon />}
         </Button>
-        <div className="mx-auto flex max-w-7xl flex-wrap justify-between gap-3">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3">
           <Button variant="secondary" asChild>
             <Link href="/resumes">Đóng</Link>
           </Button>
