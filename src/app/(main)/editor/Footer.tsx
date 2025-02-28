@@ -2,8 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { FileUserIcon, PenLineIcon } from "lucide-react";
-import Link from "next/link";
+import { FileUserIcon, Loader2, PenLineIcon } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
 import { steps } from "./steps";
 
 interface FooterProps {
@@ -21,7 +22,9 @@ export default function Footer({
   setShowSmResumePreview,
   isSaving,
 }: FooterProps) {
-
+  const router = useRouter();
+  const pathname = usePathname();
+  const [isClosing, setIsClosing] = useState(false);
   
   const previousStep = steps.find(
     (_, index) => steps[index + 1]?.key === currentStep,
@@ -30,6 +33,17 @@ export default function Footer({
   const nextStep = steps.find(
     (_, index) => steps[index - 1]?.key === currentStep,
   )?.key;
+
+  // Reset loading state when path changes
+  useEffect(() => {
+    setIsClosing(false);
+  }, [pathname]);
+
+  const handleClose = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsClosing(true);
+    router.push("/resumes");
+  };
 
   return (
     <footer className="w-full border-t px-3 py-5 items-center justify-between flex bg-white shadow-md transition-transform duration-300">
@@ -63,8 +77,20 @@ export default function Footer({
           {showSmResumePreview ? <PenLineIcon /> : <FileUserIcon />}
         </Button>
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3">
-          <Button variant="secondary" asChild>
-            <Link href="/resumes">Đóng</Link>
+          <Button 
+            variant="secondary" 
+            onClick={handleClose}
+            disabled={isClosing}
+            className="relative"
+          >
+            {isClosing ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <span>Đang đóng...</span>
+              </>
+            ) : (
+              "Đóng"
+            )}
           </Button>
           <p
             className={cn(

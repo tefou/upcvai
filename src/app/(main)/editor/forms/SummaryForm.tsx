@@ -13,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import GenerateSummaryButton from "./GenerateSummaryButton";
-import { PrinterIcon } from "@heroicons/react/24/outline";
+// import { PrinterIcon } from "@heroicons/react/24/outline";
 
 export default function SummaryForm({
   resumeData,
@@ -35,9 +35,9 @@ export default function SummaryForm({
     return unsubscribe;
   }, [form, resumeData, setResumeData]);
 
-  const handlePrint = () => {
-    window.print();
-  };
+  // const handlePrint = () => {
+  //   window.print();
+  // };
 
   return (
     <div className="relative mx-auto max-w-xl space-y-6">
