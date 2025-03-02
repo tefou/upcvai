@@ -97,9 +97,9 @@ export default function Navbar({ userData, subscriptionData }: NavbarProps) {
           {/* Always show the button for better visibility and testing */}
           <button 
             onClick={() => setShowBillingInfo(true)} 
-            className="px-3 py-1 bg-black text-white rounded-md text-sm hover:bg-gray-800 transition-colors"
+            className="px-1 py-2 bg-black text-white rounded-md text-xs hover:bg-gray-800 transition-colors"
           >
-            Xem thông tin tài khoản
+            Thông Tin Tài Khoản
           </button>
           <UserButton
             appearance={{
