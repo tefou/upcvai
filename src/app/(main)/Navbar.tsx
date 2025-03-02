@@ -97,7 +97,10 @@ export default function Navbar({ userData, subscriptionData }: NavbarProps) {
           {/* Always show the button for better visibility and testing */}
           <button 
             onClick={() => setShowBillingInfo(true)} 
-            className="px-1 py-2 bg-black text-white rounded-md text-xs hover:bg-gray-800 transition-colors"
+            className="px-3 py-2 bg-black text-white rounded-md text-xs relative overflow-hidden group"
+            style={{
+              transition: 'all 0.3s cubic-bezier(0.25, 1, 0.5, 1)'
+            }}
           >
             Thông Tin Tài Khoản
           </button>
@@ -111,13 +114,6 @@ export default function Navbar({ userData, subscriptionData }: NavbarProps) {
               },
             }}
           >
-            {/* <UserButton.MenuItems>
-              <UserButton.Link
-                label="Trạng thái thanh toán"
-                labelIcon={<CreditCard className="size-4" />}
-                href="/billing"
-              />
-            </UserButton.MenuItems> */}
           </UserButton>
         </div>
       </div>

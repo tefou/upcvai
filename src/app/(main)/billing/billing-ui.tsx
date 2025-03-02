@@ -64,9 +64,9 @@ export default function BillingUI({
       )}
       
       <div 
-        className={`fixed ${closeMenu ? "translate-x-[100%]" : "translate-x-0"} p-4 h-screen w-[300px] bg-blue-950 text-white top-0 right-0 shadow-2xl transition-all duration-700 z-50`}
+        className={`fixed ${closeMenu ? "translate-x-[100%]" : "translate-x-0"} p-4 h-screen w-[300px] bg-gradient-to-r from-gray-800 to-yellow-800 text-white top-0 right-0 shadow-2xl transition-all duration-700`}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 border-b border-yellow-900 pb-2 mb-6">
           <svg
             onClick={handleClose}
             xmlns="http://www.w3.org/2000/svg"
@@ -102,11 +102,11 @@ export default function BillingUI({
           <>
             <div className="my-10 space-y-4">
               <div className="flex items-center justify-center">
-                <div className="w-20 h-20 flex items-center justify-center bg-green-900 rounded-full text-white font-bold">
+                <div className="w-20 h-20 flex items-center justify-center bg-slate-50 rounded-full text-slate-400 font-bold">
                   {user.fullName.substring(0, 1).toUpperCase()}
                 </div>
               </div>
-              <div className="font-bold text-center text-[18px]">
+              <div className="font-bold text-center text-[19px] text-yellow-50">
                 {user.fullName}
               </div>
             </div>
@@ -114,19 +114,19 @@ export default function BillingUI({
               <div className="max-w-full px-4">
                 <div className="w-ful rounded-md p-6">
                   {subscription.level === "pre" && subscription.details ? (
-                    <div className="bg-slate-900 p-6 rounded-lg w-full">
+                    <div className="p-6 rounded-lg w-full">
                       <div className="flex items-center justify-center mb-4">
-                        <div className="bg-gradient-to-r from-yellow-700 to-amber-500 rounded-full px-5 py-2 text-white font-bold flex items-center shadow-lg">
+                        <div className="bg-gradient-to-r from-black to-yellow-600 rounded-full px-12 py-2 text-white font-bold flex items-center shadow-lg">
                           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="gold" />
                             <circle cx="12" cy="12" r="3" fill="white" />
                           </svg>
-                          <span className="mr-1 text-sm tracking-wider uppercase">Premium</span>
+                          <span className="mr-1 text-sm tracking-wider uppercase text-yellow-300">Premium</span>
                         </div>
                       </div>
                       
                       <div className="grid grid-cols-1 gap-4">
-                        <div className="bg-slate-800 p-3 rounded-lg flex items-center">
+                        <div className="bg-slate-900 p-3 rounded-lg flex items-center shadow-lg">
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-600 mr-3">
                             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
                             <line x1="16" y1="2" x2="16" y2="6"/>
@@ -135,26 +135,26 @@ export default function BillingUI({
                           </svg>
                           <div>
                             <p className="text-gray-400 text-xs">Ngày Đăng Ký</p>
-                            <p className="text-yellow-600 font-medium">
+                            <p className="text-yellow-100 font-medium">
                               {new Date(subscription.details.createdAt).toLocaleDateString("vi-VN")}
                             </p>
                           </div>
                         </div>
                         
-                        <div className="bg-slate-800 p-3 rounded-lg flex items-center">
+                        <div className="bg-slate-900 p-3 rounded-lg flex items-center">
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-600 mr-3">
                             <circle cx="12" cy="12" r="10"/>
                             <polyline points="12 6 12 12 16 14"/>
                           </svg>
                           <div>
                             <p className="text-gray-400 text-xs">Ngày Hết Hạn</p>
-                            <p className="text-yellow-600 font-medium">
+                            <p className="text-yellow-100 font-medium">
                               {new Date(subscription.details.expiresAt).toLocaleDateString("vi-VN")}
                             </p>
                           </div>
                         </div>
                         
-                        <div className="bg-slate-800 p-3 rounded-lg flex items-center">
+                        <div className="bg-slate-900 p-3 rounded-lg flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-600 mr-3">
                           <path d="M5 22h14" />
                           <path d="M5 2h14" />
@@ -163,7 +163,7 @@ export default function BillingUI({
                         </svg>
                           <div>
                             <p className="text-gray-400 text-xs">Còn Lại</p>
-                            <p className="text-yellow-600 font-medium">
+                            <p className="text-yellow-100 font-medium">
                               {formatDistance(new Date(subscription.details.expiresAt), new Date(), {
                                 locale: vi,
                                 addSuffix: false,
@@ -174,44 +174,22 @@ export default function BillingUI({
                       </div>
                     </div>
                   ) : (
-                    <div className="bg-slate-200 p-6 rounded-lg w-full">
+                    <div className="rounded-lg w-ful shadow-md">
                       <div className="flex items-center justify-center mb-4">
-                        <div className="bg-gray-400 rounded-full px-4 py-2 text-black font-bold flex items-center">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-                            <circle cx="9" cy="7" r="4"/>
-                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                          </svg>
+                        <div className="bg-gray-300 rounded-full px-12 py-2 text-black font-bold flex items-center">
                           Miễn Phí
                         </div>
                       </div>
                       
                       <div className="grid grid-cols-1 gap-4">
-                        <div className="bg-gray-300 p-3 rounded-lg flex items-center">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-600 mr-3">
-                            <path d="M12 2v2"/>
-                            <path d="M12 20v2"/>
-                            <path d="m4.93 4.93 1.41 1.41"/>
-                            <path d="m17.66 17.66 1.41 1.41"/>
-                            <path d="M2 12h2"/>
-                            <path d="M20 12h2"/>
-                            <path d="m6.34 17.66-1.41 1.41"/>
-                            <path d="m19.07 4.93-1.41 1.41"/>
-                          </svg>
-                          <div>
-                            <p className="text-gray-800 font-medium">Bạn đang bị giới hạn chức năng</p>
-                          </div>
-                        </div>
-                        
-                        <div className="bg-gray-300 p-3 rounded-lg flex items-center">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-600 mr-3">
+                        <div className="bg-gray-300 px-8 py-3 rounded-lg flex items-center">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-600 mr-3">
                             <path d="M3 20h18a1.94 1.94 0 0 0 1.84-1.38l-7.92-13.18a1.93 1.93 0 0 0-3.38.18L3.6 18.6A1.94 1.94 0 0 0 3 20z"/>
                             <path d="M12 8v4"/>
                             <path d="M12 16h.01"/>
                           </svg>
                           <div>
-                            <p className="text-gray-800 font-medium">Bạn chỉ dùng được các tính năng cơ bản</p>
+                            <p className="text-gray-800 font-medium">Tính năng bị giới hạn</p>
                           </div>
                         </div>
                       </div>
