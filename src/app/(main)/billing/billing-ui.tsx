@@ -53,7 +53,7 @@ export default function BillingUI({
   
   return (
     <div>
-      {/* Only show the button when not controlled externally */}
+      {/* Only show the button when not controlled externally
       {!initialOpenState && (
         <button 
           onClick={() => setCloseMenu(!closeMenu)} 
@@ -61,8 +61,7 @@ export default function BillingUI({
         >
           Xem thông tin
         </button>
-      )}
-      
+      )} */}
       <div 
         className={`fixed ${closeMenu ? "translate-x-[100%]" : "translate-x-0"} p-4 h-screen w-[300px] bg-gradient-to-r from-gray-800 to-yellow-800 text-white top-0 right-0 shadow-2xl transition-all duration-700`}
       >
