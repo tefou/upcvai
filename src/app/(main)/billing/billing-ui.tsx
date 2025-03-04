@@ -63,7 +63,7 @@ export default function BillingUI({
         </button>
       )} */}
       <div 
-        className={`fixed ${closeMenu ? "translate-x-[100%]" : "translate-x-0"} p-4 h-screen w-[300px] bg-gradient-to-r from-gray-800 to-yellow-800 text-white top-0 right-0 shadow-2xl transition-all duration-700`}
+        className={`fixed ${closeMenu ? "translate-x-[100%]" : "translate-x-0"} p-4 h-screen w-[300px] bg-gradient-to-r from-gray-800 to-yellow-800 text-white top-0 right-0 shadow-2xl transition-all duration-300`}
       >
         <div className="flex items-center gap-2 border-b border-yellow-900 pb-2 mb-6">
           <svg
