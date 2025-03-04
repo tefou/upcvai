@@ -1,3 +1,4 @@
+import { Roboto, Poppins } from 'next/font/google';
 import { canCreateResume } from "@/lib/permissions";
 import prisma from "@/lib/prisma";
 import { getUserSubscriptionLevel } from "@/lib/subscriptions";
@@ -7,12 +8,23 @@ import { Metadata } from "next";
 import CreateResumeButton from "./CreateResumeButton";
 import ResumeItem from "./ResumeItem";
 
-
 export const metadata: Metadata = {
   title: "CV của Bạn",
   icons: "D:/LEARNS/AtSchool/FPT UNIVERSITY/EXE/UPproject/upcvai/src/assets/LogoUp_Black.png",
 };
 
+// Import hai font với subset hỗ trợ tiếng Việt
+const roboto = Roboto({
+  weight: '400',
+  subsets: ['latin', 'vietnamese'],
+});
+
+const poppins = Poppins({
+  weight: '400',
+  subsets: ['latin'],
+});
+
+// Hàm tạo nội dung dựa theo thời gian hiện tại tại Việt Nam
 const getTimeBasedContent = () => {
   const vietnamTime = new Date().toLocaleString("en-US", {
     timeZone: "Asia/Ho_Chi_Minh"
@@ -20,7 +32,7 @@ const getTimeBasedContent = () => {
   const vietnamDate = new Date(vietnamTime);
   const hour = vietnamDate.getHours();
   
-  // Morning (5AM - 9:59AM)
+  // Buổi sáng (5AM - 9:59AM)
   if (hour >= 5 && hour < 10) {
     const morningWishes = [
       "Chúc bạn một ngày tràn đầy năng lượng và thành công",
@@ -31,13 +43,13 @@ const getTimeBasedContent = () => {
     ];
     
     return {
-      greeting: "Buổi sáng tốt lành",
+      greeting: "Chào buổi sáng",
       wish: morningWishes[Math.floor(Math.random() * morningWishes.length)],
-      background: "from-cyan-600 via-blue-500 to-sky-400", // Sunrise colors
+      background: "from-cyan-600 via-blue-500 to-sky-400", // Màu sắc ban mai
     };
   }
   
-  // Noon (10AM - 12:59PM)
+  // Buổi trưa (10AM - 12:59PM)
   if (hour >= 10 && hour < 13) {
     const noonWishes = [
       "Chúc bạn có bữa trưa ngon miệng và bổ dưỡng",
@@ -48,13 +60,13 @@ const getTimeBasedContent = () => {
     ];
     
     return {
-      greeting: "Trưa vui vẻ nhé",
+      greeting: "Chào buổi trưa",
       wish: noonWishes[Math.floor(Math.random() * noonWishes.length)],
-      background: "from-amber-500 via-yellow-500 to-orange-400", // Midday sun colors
+      background: "from-amber-500 via-yellow-500 to-orange-400", // Màu sắc ban trưa
     };
   }
   
-  // Afternoon (1PM - 4:59PM)
+  // Buổi chiều (1PM - 4:59PM)
   if (hour >= 13 && hour < 17) {
     const afternoonWishes = [
       "Hy vọng công việc của bạn luôn suôn sẻ",
@@ -65,13 +77,13 @@ const getTimeBasedContent = () => {
     ];
     
     return {
-      greeting: "Chiều năng lượng nhé",
+      greeting: "Xin Chào",
       wish: afternoonWishes[Math.floor(Math.random() * afternoonWishes.length)],
-      background: "from-orange-400 via-yellow-300 to-amber-200", // Afternoon colors
+      background: "from-orange-400 via-yellow-300 to-amber-200", // Màu sắc buổi chiều
     };
   }
   
-  // Evening/Night (5PM - 4:59AM)
+  // Buổi tối/đêm (5PM - 4:59AM)
   const eveningWishes = [
     "Hãy thư giãn sau một ngày làm việc chăm chỉ",
     "Chúc bạn có một buổi tối bình yên và ấm áp",
@@ -80,23 +92,24 @@ const getTimeBasedContent = () => {
     "Chúc bạn một buổi tối vui vẻ bên người thân và bạn bè"
   ];
   
-  // Late evening with darker colors (after 9PM)
+  // Đêm khuya (sau 9PM)
   if (hour >= 21 || hour < 5) {
     return {
-      greeting: "Ngủ ngon nhé",
+      greeting: "Chúc ngủ ngon",
       wish: eveningWishes[Math.floor(Math.random() * eveningWishes.length)],
-      background: "from-blue-900 via-indigo-800 to-purple-900", // Night colors
+      background: "from-blue-900 via-indigo-800 to-purple-900", // Màu sắc ban đêm
     };
   }
   
-  // Early evening (5PM - 8:59PM)
+  // Buổi tối sớm (5PM - 8:59PM)
   return {
-    greeting: "Tối vui vẻ nhé",
+    greeting: "Chào buổi tối",
     wish: eveningWishes[Math.floor(Math.random() * eveningWishes.length)],
-    background: "from-purple-700 via-orange-600 to-pink-500", // Sunset colors
+    background: "from-purple-700 via-orange-600 to-pink-500", // Màu sắc hoàng hôn
   };
 };
 
+// Hàm định dạng ngày theo kiểu tiếng Việt
 const formatDate = () => {
   const date = new Date();
   const options: Intl.DateTimeFormatOptions = {
@@ -106,21 +119,21 @@ const formatDate = () => {
     day: 'numeric'
   };
   const rawDate = date.toLocaleDateString('vi-VN', options);
-  console.log(rawDate)
+  console.log(rawDate);
   
-  // Transform from "Thứ Năm, 20 tháng 2, 2025" to "Thứ Năm, ngày 20 tháng 2 năm 2025"
+  // Chuyển đổi từ "Thứ Năm, 20 tháng 2, 2025" thành "Thứ Năm, ngày 20 tháng 2 2025"
   const parts = rawDate.split(',');
   if (parts.length >= 2) {
     const weekday = parts[0].trim();
     const dateSection = parts[1].trim();
-    // Extract day, month, year
+    // Tách ngày, tháng, năm
     const dateMatch = dateSection.match(/(\d+) tháng (\d+), (\d+)/);
     if (dateMatch) {
       return `${weekday}, ngày ${dateMatch[1]} tháng ${dateMatch[2]} ${dateMatch[3]}`;
     }
   }
   
-  // Fallback in case the format doesn't match expectations
+  // Trường hợp không khớp định dạng mong đợi
   return `${rawDate.replace(', ', ', ngày ').replace(', ', ' ')}`;
 };
 
@@ -151,28 +164,31 @@ export default async function Page() {
   ]);
 
   const { greeting, wish, background } = getTimeBasedContent();
-  // console.log(formatDate);
+
   return (
     <main className="mx-auto w-full max-w-7xl space-y-6 px-3 py-6">
-      {/* Greeting Section with Dynamic Background */}
+      {/* Phần chào với nền gradient thay đổi theo thời gian */}
       <div className={`relative overflow-hidden rounded-xl bg-gradient-to-r ${background} p-8 shadow-lg`}>
         <div className="relative z-10">
-          <h1 className="mb-2 font-serif text-4xl font-medium tracking-wide text-white">
+          {/* Sử dụng font Roboto cho lời chào */}
+          <h1 className={`${roboto.className} mb-2 font-serif text-4xl font-medium tracking-wide text-white`}>
             {`${greeting}, ${user?.firstName || 'thien'}`}
           </h1>
-          <p className="text-blue-100 mb-2">
+          {/* Sử dụng font Poppins cho ngày tháng */}
+          <p className={`${poppins.className} text-blue-100 mb-2`}>
             {formatDate()}
           </p>
-          <p className="text-blue-50 text-lg italic">
+          {/* Sử dụng font Poppins cho lời chúc */}
+          <p className={`${poppins.className} text-blue-50 text-lg italic`}>
             {wish}
           </p>
         </div>
-        {/* Decorative Elements */}
+        {/* Các phần tử trang trí */}
         <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white opacity-10"></div>
         <div className="absolute -bottom-10 -left-10 h-32 w-32 rounded-full bg-white opacity-10"></div>
       </div>
 
-      {/* Main Content */}
+      {/* Nội dung chính */}
       <div className="mt-8 space-y-8">
         <CreateResumeButton
           canCreate={canCreateResume(subscriptionLevel, totalCount)}
@@ -183,22 +199,23 @@ export default async function Page() {
             <h2 className="text-3xl font-bold text-cyan-700">CV của Bạn</h2>
             <div className="rounded-lg bg-cyan-50 px-4 py-2">
               <p className="text-cyan-700">
-                Bạn đang có {" "}
+                Bạn đang có{" "}
                 <span className="text-xl font-bold text-cyan-600">
                   {totalCount}
-                </span> CV
+                </span>{" "}
+                CV
               </p>
             </div>
           </div>
           
-          {/* Resumes Grid */}
+          {/* Lưới hiển thị các CV */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {resumes.map((resume) => (
               <ResumeItem key={resume.id} resume={resume} />
             ))}
           </div>
           
-          {/* Empty State */}
+          {/* Trạng thái trống */}
           {resumes.length === 0 && (
             <div className="mt-8 text-center">
               <p className="text-gray-500">
