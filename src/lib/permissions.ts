@@ -1,3 +1,4 @@
+// permissions.ts
 import { SubscriptionLevel } from "./subscriptions";
 
 export function canCreateResume(
@@ -6,7 +7,7 @@ export function canCreateResume(
 ) {
   const maxResumeMap: Record<SubscriptionLevel, number> = {
     free: 1,
-    pre: Infinity,
+    pre: 2,
   };
 
   const maxResumes = maxResumeMap[subscriptionLevel];

@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { createCheckoutSession } from "./actions";
 
 
-const premiumFeatures = ["Hỗ trợ AI", "Không Giới Hạn CV","Cá Nhân Hóa CV"]
+const premiumFeatures = ["Hỗ trợ AI", "Được tạo thêm 1 CV","Cá Nhân Hóa CV"]
 export default function PremiumModal(){
 
 

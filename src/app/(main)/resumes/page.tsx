@@ -43,7 +43,7 @@ const getTimeBasedContent = () => {
     ];
     
     return {
-      greeting: "Chào buổi sáng",
+      greeting: "Buổi sáng đầy năng lượng nhé",
       wish: morningWishes[Math.floor(Math.random() * morningWishes.length)],
       background: "from-cyan-600 via-blue-500 to-sky-400", // Màu sắc ban mai
     };
@@ -60,7 +60,7 @@ const getTimeBasedContent = () => {
     ];
     
     return {
-      greeting: "Chào buổi trưa",
+      greeting: "Buổi trưa ngon miệng nhé",
       wish: noonWishes[Math.floor(Math.random() * noonWishes.length)],
       background: "from-amber-500 via-yellow-500 to-orange-400", // Màu sắc ban trưa
     };
@@ -77,7 +77,7 @@ const getTimeBasedContent = () => {
     ];
     
     return {
-      greeting: "Xin Chào",
+      greeting: "Buổi chiều hứng khởi nhé",
       wish: afternoonWishes[Math.floor(Math.random() * afternoonWishes.length)],
       background: "from-orange-400 via-yellow-300 to-amber-200", // Màu sắc buổi chiều
     };
@@ -95,7 +95,7 @@ const getTimeBasedContent = () => {
   // Đêm khuya (sau 9PM)
   if (hour >= 21 || hour < 5) {
     return {
-      greeting: "Chúc ngủ ngon",
+      greeting: "Ngủ ngon và mơ đẹp nhé",
       wish: eveningWishes[Math.floor(Math.random() * eveningWishes.length)],
       background: "from-blue-900 via-indigo-800 to-purple-900", // Màu sắc ban đêm
     };
@@ -103,7 +103,7 @@ const getTimeBasedContent = () => {
   
   // Buổi tối sớm (5PM - 8:59PM)
   return {
-    greeting: "Chào buổi tối",
+    greeting: "Buổi tối ấm áp nhé",
     wish: eveningWishes[Math.floor(Math.random() * eveningWishes.length)],
     background: "from-purple-700 via-orange-600 to-pink-500", // Màu sắc hoàng hôn
   };
@@ -192,6 +192,7 @@ export default async function Page() {
       <div className="mt-8 space-y-8">
         <CreateResumeButton
           canCreate={canCreateResume(subscriptionLevel, totalCount)}
+          totalCount={totalCount}
         />
         
         <div className="space-y-3">

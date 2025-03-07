@@ -2,17 +2,32 @@
 
 import { Button } from "@/components/ui/button";
 import usePremiumModal from "@/hooks/usePremiumModal";
-import { PlusSquare } from "lucide-react";
+import { PlusSquare, AlertCircle } from "lucide-react";
 import Link from "next/link";
 
 interface CreateResumeButtonProps {
   canCreate: boolean;
+  totalCount: number; // Thêm prop để biết số lượng CV hiện tại
 }
 
 export default function CreateResumeButton({
   canCreate,
+  totalCount,
 }: CreateResumeButtonProps) {
   const premiumModal = usePremiumModal();
+  
+  // Kiểm tra nếu đã đạt giới hạn 3 CV
+  if (totalCount >= 2) {
+    return (
+      <Button
+        disabled
+        className="mx-auto flex w-fit gap-2 bg-gray-400 text-gray-700 cursor-not-allowed"
+      >
+        <AlertCircle className="size-5" />
+        Bạn đã đạt giới hạn 2 CV
+      </Button>
+    );
+  }
 
   if (canCreate) {
     return (
