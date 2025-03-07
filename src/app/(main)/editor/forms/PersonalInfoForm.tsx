@@ -8,16 +8,26 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { EditorFormProps } from "@/lib/types";
 import { personalInfoSchema, PersonalInfoValues } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function PersonalInfoForm({
   resumeData,
   setResumeData,
 }: EditorFormProps) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  
   const form = useForm<PersonalInfoValues>({
     resolver: zodResolver(personalInfoSchema),
     defaultValues: {
@@ -41,12 +51,59 @@ export default function PersonalInfoForm({
 
   const photoInputRef = useRef<HTMLInputElement>(null);
 
+  // Cải thiện kiểu dữ liệu cho onChange handler
+  const handleFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>, 
+    onChange: (value: File | null) => void
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Kiểm tra kích thước file (2MB = 2 * 1024 * 1024 bytes)
+    const maxSizeInBytes = 2 * 1024 * 1024;
+    
+    if (file.size > maxSizeInBytes) {
+      // Hiển thị dialog thông báo lỗi
+      setErrorMessage("Kích thước ảnh không được vượt quá 2MB. Vui lòng chọn ảnh khác.");
+      setIsDialogOpen(true);
+      
+      // Reset input file
+      if (photoInputRef.current) {
+        photoInputRef.current.value = "";
+      }
+      return;
+    }
+    
+    // Nếu file hợp lệ, cập nhật giá trị
+    onChange(file);
+  };
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+  };
+
   return (
     <div className="mx-auto max-w-xl space-y-6">
       <div className="space-y-1.5 text-center">
         <h2 className="text-2xl font-semibold">Thông Tin Cá Nhân của Bạn</h2>
         <p className="text-sm text-muted-foreground">Hãy kể cho chúng tôi về bạn.</p>
       </div>
+      
+      {/* Dialog thông báo lỗi */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Lỗi tải lên ảnh</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            {errorMessage}
+          </div>
+          <DialogFooter>
+            <Button onClick={closeDialog}>Đồng ý</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
       <Form {...form}>
         <form className="space-y-3">
           <FormField
@@ -62,10 +119,7 @@ export default function PersonalInfoForm({
                       {...fieldValues}
                       type="file"
                       accept="image/*"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        fieldValues.onChange(file);
-                      }}
+                      onChange={(e) => handleFileChange(e, fieldValues.onChange)}
                       ref={photoInputRef}
                     />
                   </FormControl>
@@ -127,19 +181,19 @@ export default function PersonalInfoForm({
               </FormItem>
             )}
           />
-            <FormField
-              control={form.control}
-              name="place"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nơi Sinh Sống</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <FormField
+            control={form.control}
+            name="place"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nơi Sinh Sống</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="phone"
